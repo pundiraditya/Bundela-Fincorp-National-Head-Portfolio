@@ -38,35 +38,129 @@
   .bg-anim {
     position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
   }
+
+  /* Large slow orbs */
   .bg-anim::before {
     content: '';
-    position: absolute; width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(46,204,113,0.07) 0%, transparent 70%);
-    top: -100px; right: -100px;
-    animation: float1 12s ease-in-out infinite;
+    position: absolute; width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(46,204,113,0.09) 0%, transparent 70%);
+    top: -150px; right: -150px;
+    animation: orbFloat1 18s ease-in-out infinite;
   }
   .bg-anim::after {
     content: '';
-    position: absolute; width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(212,168,67,0.05) 0%, transparent 70%);
-    bottom: 100px; left: -100px;
-    animation: float2 15s ease-in-out infinite;
+    position: absolute; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(212,168,67,0.07) 0%, transparent 70%);
+    bottom: 80px; left: -120px;
+    animation: orbFloat2 22s ease-in-out infinite;
   }
-  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,40px)} }
-  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,-30px)} }
 
-  /* floating particles */
+  /* Extra orbs via canvas-like divs */
+  .bg-orb {
+    position: absolute; border-radius: 50%; pointer-events: none;
+    filter: blur(0px);
+  }
+  .bg-orb-1 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(46,204,113,0.06) 0%, transparent 70%);
+    bottom: 30%; right: 20%;
+    animation: orbFloat3 26s ease-in-out infinite;
+  }
+  .bg-orb-2 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(212,168,67,0.05) 0%, transparent 70%);
+    top: 40%; left: 30%;
+    animation: orbFloat4 20s ease-in-out infinite;
+  }
+  .bg-orb-3 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(74,222,128,0.04) 0%, transparent 70%);
+    top: 60%; right: 10%;
+    animation: orbFloat5 30s ease-in-out infinite;
+  }
+
+  @keyframes orbFloat1 {
+    0%,100%{transform:translate(0,0) scale(1)}
+    33%{transform:translate(-40px,50px) scale(1.05)}
+    66%{transform:translate(30px,-20px) scale(0.97)}
+  }
+  @keyframes orbFloat2 {
+    0%,100%{transform:translate(0,0) scale(1)}
+    33%{transform:translate(50px,-40px) scale(1.08)}
+    66%{transform:translate(-25px,30px) scale(0.95)}
+  }
+  @keyframes orbFloat3 {
+    0%,100%{transform:translate(0,0) scale(1)}
+    50%{transform:translate(-60px,-50px) scale(1.1)}
+  }
+  @keyframes orbFloat4 {
+    0%,100%{transform:translate(0,0)}
+    25%{transform:translate(30px,40px)}
+    75%{transform:translate(-30px,-20px)}
+  }
+  @keyframes orbFloat5 {
+    0%,100%{transform:translate(0,0) scale(1)}
+    40%{transform:translate(40px,-60px) scale(1.06)}
+    80%{transform:translate(-30px,30px) scale(0.94)}
+  }
+
+  /* ── GRID LINES (subtle moving mesh) ── */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(46,204,113,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(46,204,113,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridDrift 40s linear infinite;
+  }
+  @keyframes gridDrift {
+    0%   { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
+  }
+
+  /* ── SHOOTING STARS ── */
+  .stars-layer {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .star {
+    position: absolute; border-radius: 50%;
+    background: rgba(46,204,113,0.6);
+    animation: shoot linear infinite;
+  }
+  @keyframes shoot {
+    0%   { transform: translateX(0) translateY(0); opacity: 0; }
+    5%   { opacity: 1; }
+    100% { transform: translateX(-120vw) translateY(60vh); opacity: 0; }
+  }
+
+  /* ── FLOATING PARTICLES ── */
   .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
   .particle {
     position: absolute; border-radius: 50%;
-    background: rgba(46,204,113,0.15);
+    background: rgba(46,204,113,0.18);
     animation: rise linear infinite;
   }
   @keyframes rise {
-    0% { transform: translateY(100vh) scale(0); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 0.5; }
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    8%   { opacity: 1; }
+    90%  { opacity: 0.5; }
     100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  /* ── HORIZONTAL DRIFT LINES ── */
+  .drift-lines {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .drift-line {
+    position: absolute; left: -200px; height: 1px;
+    background: linear-gradient(to right, transparent, rgba(46,204,113,0.15), transparent);
+    animation: driftRight linear infinite;
+  }
+  @keyframes driftRight {
+    0%   { transform: translateX(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateX(120vw); opacity: 0; }
   }
 
   /* ─── NAV ─── */
@@ -195,7 +289,6 @@
     text-align: center; padding: 0 2rem;
     line-height: 1.6;
   }
-  /* ── TO ADD PHOTO: replace .photo-frame contents with <img src="your-photo.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:22px;"> ── */
 
   /* corner accents */
   .corner { position: absolute; width: 24px; height: 24px; }
@@ -235,6 +328,151 @@
     color: var(--white); margin-bottom: 3rem;
   }
   .section-h2 span { color: var(--gold); }
+
+  /* ─── PHOTO STRIP ─── */
+  .photo-strip-section {
+    position: relative; z-index: 1;
+    padding: 4rem 0;
+    border-top: 1px solid var(--card-border);
+    border-bottom: 1px solid var(--card-border);
+    background: rgba(46,204,113,0.02);
+    overflow: hidden;
+  }
+
+  /* animated glowing line above and below the strip */
+  .photo-strip-section::before,
+  .photo-strip-section::after {
+    content: '';
+    position: absolute; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right,
+      transparent 0%,
+      rgba(46,204,113,0.5) 20%,
+      rgba(212,168,67,0.4) 50%,
+      rgba(46,204,113,0.5) 80%,
+      transparent 100%);
+    animation: shimmerLine 4s ease-in-out infinite;
+  }
+  .photo-strip-section::before { top: 0; }
+  .photo-strip-section::after  { bottom: 0; animation-delay: 2s; }
+  @keyframes shimmerLine {
+    0%,100% { opacity: 0.4; background-position: 0% 0; }
+    50%      { opacity: 1;   background-position: 100% 0; }
+  }
+
+  .strip-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+    padding: 0 2rem;
+  }
+  .strip-header .section-tag {
+    justify-content: center;
+    display: flex;
+  }
+  .strip-header .section-tag::before { display: none; }
+
+  .strip-outer {
+    position: relative; width: 100%; overflow: hidden;
+  }
+
+  /* fade masks on left and right */
+  .strip-outer::before,
+  .strip-outer::after {
+    content: '';
+    position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
+  }
+  .strip-outer::before {
+    left: 0;
+    background: linear-gradient(to right, var(--green-deep) 0%, rgba(10,46,26,0.8) 40%, transparent 100%);
+  }
+  .strip-outer::after {
+    right: 0;
+    background: linear-gradient(to left, var(--green-deep) 0%, rgba(10,46,26,0.8) 40%, transparent 100%);
+  }
+
+  .strip-track {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    animation: stripMarquee 35s linear infinite;
+    padding: 8px 0 12px;
+  }
+  .strip-track:hover { animation-play-state: paused; }
+
+  @keyframes stripMarquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .strip-card {
+    width: 200px; height: 250px;
+    border-radius: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s, box-shadow 0.3s;
+    background: rgba(255,255,255,0.04);
+  }
+  .strip-card:hover {
+    transform: scale(1.06) translateY(-4px);
+    border-color: rgba(46,204,113,0.4);
+    box-shadow: 0 12px 40px rgba(46,204,113,0.15);
+  }
+  .strip-card img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .strip-card:hover img { transform: scale(1.08); }
+  .strip-card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,46,26,0.7) 0%, transparent 50%);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: flex-end;
+    padding: 1rem;
+  }
+  .strip-card:hover .strip-card-overlay { opacity: 1; }
+  .strip-card-label {
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--green-bright);
+    text-transform: uppercase; letter-spacing: 0.07em;
+  }
+
+  /* placeholder cards (shown when no photo is added) */
+  .strip-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0.6rem;
+  }
+  .strip-placeholder-icon {
+    font-size: 2.2rem;
+    animation: iconFloat 3s ease-in-out infinite;
+  }
+  @keyframes iconFloat {
+    0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)}
+  }
+  .strip-placeholder-text {
+    font-size: 0.72rem; color: rgba(255,255,255,0.35);
+    text-align: center; padding: 0 0.75rem;
+    line-height: 1.5;
+  }
+
+  /* second row (reverse direction) */
+  .strip-track-reverse {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    animation: stripMarqueeReverse 40s linear infinite;
+    padding: 0 0 8px;
+    margin-top: 16px;
+  }
+  .strip-track-reverse:hover { animation-play-state: paused; }
+  @keyframes stripMarqueeReverse {
+    0%   { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
 
   /* ─── ABOUT ─── */
   .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
@@ -379,13 +617,23 @@
     .stat { min-width: 50%; margin-bottom: 1rem; border-right: none; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
     .section-wrap { padding: 4rem 1.5rem; }
     .about-grid, .contact-grid { grid-template-columns: 1fr; }
+    .strip-card { width: 160px; height: 200px; }
+    .strip-outer::before,
+    .strip-outer::after { width: 60px; }
   }
 </style>
 </head>
 <body>
 
-<!-- Animated BG -->
-<div class="bg-anim"></div>
+<!-- ═══ ANIMATED BACKGROUND LAYERS ═══ -->
+<div class="bg-anim">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+</div>
+<div class="bg-grid"></div>
+<div class="stars-layer" id="stars"></div>
+<div class="drift-lines" id="driftLines"></div>
 <div class="particles" id="particles"></div>
 
 <!-- NAV -->
@@ -393,6 +641,7 @@
   <div class="nav-logo">SA</div>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
+    <li><a href="#photos">Gallery</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#ev-focus">EV Focus</a></li>
@@ -419,27 +668,19 @@
       </div>
     </div>
 
-    <!-- PHOTO SECTION — Add your photo here -->
-     <img src="SAmain.jpg"
-       style="width:100%;height:90%;
-       object-fit:cover;
-       border-radius:22px;">
-    
+    <!-- PHOTO SECTION -->
     <div class="hero-photo-wrap">
+      <div class="photo-frame">
         <span class="corner tl"></span>
         <span class="corner tr"></span>
         <span class="corner bl"></span>
         <span class="corner br"></span>
-        <!--
-          ╔══════════════════════════════════════╗
-          ║  ADD YOUR PHOTO HERE                 ║
-          ║  Replace this block with:            ║
-          ║  <img src="your-photo.jpg"           ║
-          ║       style="width:100%;height:100%; ║
-          ║       object-fit:cover;              ║
-          ║       border-radius:22px;">          ║
-          ╚══════════════════════════════════════╝
-        -->
+        
+             <!-- <img src="SAmain.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:22px;"> -->
+        
+        
+        <div class=><img src="SAmain.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:22px;"><br><small style="opacity:0.5"></small></div>
+      </div>
     </div>
 
     <div class="hero-stats">
@@ -462,6 +703,309 @@
     </div>
   </div>
 </section>
+
+<!-- ═══════════════════════════════════════
+     HORIZONTAL SCROLLING PHOTO STRIP
+     ─────────────────────────────────────
+     HOW TO ADD YOUR PHOTOS:
+     Replace each strip-card's inner content with:
+       <img src="your-photo.jpg" alt="Description">
+       <div class="strip-card-overlay">
+         <span class="strip-card-label">Caption</span>
+       </div>
+     ═══════════════════════════════════════ -->
+<section id="photos" class="photo-strip-section">
+  <div class="strip-header">
+    <div class="section-tag">Moments &amp; Milestones</div>
+  </div>
+
+  <div class="strip-outer">
+
+    <!-- ROW 1 — scrolls left -->
+    <div class="strip-track" id="stripRow1">
+
+      <!-- Card 1 — replace inner content with your photo -->
+      <div class="strip-card">
+  <img src="SAgroup.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 2 -->
+      <div class="strip-card">
+  <img src="photo1.jpeg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 3 -->
+      <div class="strip-card">
+  <img src="photo2.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 4 -->
+      <div class="strip-card">
+  <img src="photo3.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 5 -->
+      <div class="strip-card">
+  <img src="photo4.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 6 -->
+      <div class="strip-card">
+  <img src="photo5.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 7 -->
+      <div class="strip-card">
+  <img src="photo6.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+      <!-- Card 8 -->
+      <div class="strip-card">
+  <img src="photo7.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 9 -->
+      <div class="strip-card">
+  <img src="photo8.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 10 -->
+      <div class="strip-card">
+  <img src="photo9.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 11 -->
+      <div class="strip-card">
+  <img src="photo10.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 12 -->
+      <div class="strip-card">
+  <img src="photo11.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 13 -->
+      <div class="strip-card">
+  <img src="photo12.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 14 -->
+      <div class="strip-card">
+  <img src="photo13.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 15 -->
+      <div class="strip-card">
+  <img src="photo14.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 16 -->
+      <div class="strip-card">
+  <img src="photo15.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+      <!-- ── DUPLICATE SET (required for seamless loop) ── -->
+      <div class="strip-card">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">🤝</div>
+          <div class="strip-placeholder-text">Partnership Meet</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+      </div>
+      <div class="strip-card">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">⚡</div>
+          <div class="strip-placeholder-text">EV Dealer Event</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">EV Finance</span></div>
+      </div>
+      <div class="strip-card">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">📊</div>
+          <div class="strip-placeholder-text">Strategy Session</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Strategy</span></div>
+      </div>
+      <div class="strip-card">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">🌿</div>
+          <div class="strip-placeholder-text">Green Finance Summit</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Green Finance</span></div>
+      </div>
+      <div class="strip-card">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">🏆</div>
+          <div class="strip-placeholder-text">Achievement</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Awards</span></div>
+      </div>
+      <div class="strip-card">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">🚗</div>
+          <div class="strip-placeholder-text">EV Showcase</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">EV Showcase</span></div>
+      </div>
+      <div class="strip-card">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">📍</div>
+          <div class="strip-placeholder-text">Field Visit</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Field Work</span></div>
+      </div>
+      <div class="strip-card">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">💼</div>
+          <div class="strip-placeholder-text">Corporate Event</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Corporate</span></div>
+      </div>
+    </div>
+
+    <!-- ROW 2 — scrolls right (reverse) -->
+    <div class="strip-track-reverse" id="stripRow2">
+
+      <!-- Card 1 — replace inner content with your photo -->
+      <div class="strip-card">
+  <img src="SAgroup.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 2 -->
+      <div class="strip-card">
+  <img src="photo1.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 3 -->
+      <div class="strip-card">
+  <img src="photo2.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 4 -->
+      <div class="strip-card">
+  <img src="photo3.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 5 -->
+      <div class="strip-card">
+  <img src="photo4.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 6 -->
+      <div class="strip-card">
+  <img src="photo5.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+
+      <!-- Card 7 -->
+      <div class="strip-card">
+  <img src="photo6.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+      <!-- Card 8 -->
+      <div class="strip-card">
+  <img src="photo7.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 9 -->
+      <div class="strip-card">
+  <img src="photo8.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 10 -->
+      <div class="strip-card">
+  <img src="photo9.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 11 -->
+      <div class="strip-card">
+  <img src="photo10.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 12 -->
+      <div class="strip-card">
+  <img src="photo11.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 13 -->
+      <div class="strip-card">
+  <img src="photo12.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 14 -->
+      <div class="strip-card">
+  <img src="photo13.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 15 -->
+      <div class="strip-card">
+  <img src="photo14.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+<!-- Card 16 -->
+      <div class="strip-card">
+  <img src="photo15.jpg" alt="Partnership Meet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  <div class="strip-card-overlay"><span class="strip-card-label">Partnerships</span></div>
+</div>
+      <!-- duplicate for reverse loop 
+      <div class="strip-card" style="height:180px;">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">🌱</div>
+          <div class="strip-placeholder-text">Green Initiative</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Green Initiative</span></div>
+      </div>
+      <div class="strip-card" style="height:180px;">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">📱</div>
+          <div class="strip-placeholder-text">Fintech Connect</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Fintech</span></div>
+      </div>
+      <div class="strip-card" style="height:180px;">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">🔋</div>
+          <div class="strip-placeholder-text">EV Charging Hub</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">EV Hub</span></div>
+      </div>
+      <div class="strip-card" style="height:180px;">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">📈</div>
+          <div class="strip-placeholder-text">Growth Milestone</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Growth</span></div>
+      </div>
+      <div class="strip-card" style="height:180px;">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">🤜</div>
+          <div class="strip-placeholder-text">Team Building</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Team</span></div>
+      </div>
+      <div class="strip-card" style="height:180px;">
+        <div class="strip-placeholder">
+          <div class="strip-placeholder-icon">🏙️</div>
+          <div class="strip-placeholder-text">City Expansion</div>
+        </div>
+        <div class="strip-card-overlay"><span class="strip-card-label">Expansion</span></div>
+      </div>
+    </div> -->
+
+  </div><!-- /strip-outer -->
+</section>
+<!-- END PHOTO STRIP -->
 
 <!-- ABOUT -->
 <section id="about">
@@ -581,7 +1125,6 @@
     <div class="section-tag reveal">Career Journey</div>
     <h2 class="section-h2 reveal">Work <span>Experience</span></h2>
     <div class="exp-timeline">
-
       <div class="exp-item reveal">
         <span class="exp-dot"></span>
         <div class="exp-period">2021 – Present · 3.4 Years</div>
@@ -599,7 +1142,6 @@
           <span class="exp-tag">Loan Book Management</span>
         </div>
       </div>
-
     </div>
   </div>
 </section>
@@ -687,94 +1229,134 @@
 </footer>
 
 <script>
-  /* ── particles ── */
-  const container = document.getElementById('particles');
-  for (let i = 0; i < 18; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    const size = Math.random() * 6 + 3;
-    p.style.cssText = `
-      width:${size}px; height:${size}px;
-      left:${Math.random()*100}%;
-      animation-duration:${Math.random()*15+10}s;
-      animation-delay:${Math.random()*10}s;
-      opacity:${Math.random()*0.4+0.1};
-    `;
-    container.appendChild(p);
-  }
+/* ── PARTICLES ── */
+const pContainer = document.getElementById('particles');
+for (let i = 0; i < 22; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 6 + 2;
+  p.style.cssText = `
+    width:${size}px; height:${size}px;
+    left:${Math.random()*100}%;
+    animation-duration:${Math.random()*18+8}s;
+    animation-delay:${Math.random()*12}s;
+    opacity:${Math.random()*0.35+0.08};
+  `;
+  pContainer.appendChild(p);
+}
 
-  /* ── scroll reveal ── */
-  const revealEls = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  revealEls.forEach(el => io.observe(el));
+/* ── SHOOTING STARS ── */
+const starsLayer = document.getElementById('stars');
+function spawnStar() {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2 + 1;
+  const dur  = Math.random() * 6 + 4;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    top:${Math.random()*60}%;
+    right:${Math.random()*30}%;
+    animation-duration:${dur}s;
+    animation-delay:0s;
+    box-shadow: 0 0 ${size*2}px rgba(46,204,113,0.8);
+  `;
+  starsLayer.appendChild(s);
+  setTimeout(() => s.remove(), (dur + 0.5) * 1000);
+}
+setInterval(spawnStar, 2200);
+for (let i = 0; i < 4; i++) setTimeout(spawnStar, i * 600);
 
-  /* ── skill bars ── */
-  const barIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.skill-bar').forEach(bar => {
-          bar.style.width = bar.dataset.width + '%';
-        });
-        barIO.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.3 });
-  document.querySelectorAll('.skills-grid').forEach(g => barIO.observe(g));
+/* ── DRIFT LINES ── */
+const driftLayer = document.getElementById('driftLines');
+function spawnDriftLine() {
+  const line = document.createElement('div');
+  line.className = 'drift-line';
+  const width = Math.random() * 200 + 100;
+  const dur   = Math.random() * 12 + 8;
+  line.style.cssText = `
+    width:${width}px;
+    top:${Math.random()*100}%;
+    animation-duration:${dur}s;
+    animation-delay:0s;
+    opacity:${Math.random()*0.5+0.1};
+  `;
+  driftLayer.appendChild(line);
+  setTimeout(() => line.remove(), (dur + 1) * 1000);
+}
+setInterval(spawnDriftLine, 1800);
+for (let i = 0; i < 5; i++) setTimeout(spawnDriftLine, i * 400);
 
-  /* ── count up numbers ── */
-  const countIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('[data-count]').forEach(el => {
-          const target = parseFloat(el.dataset.count);
-          const isDecimal = String(target).includes('.');
-          let start = 0;
-          const dur = 1800;
-          const step = 16;
-          const inc = target / (dur / step);
-          const timer = setInterval(() => {
-            start += inc;
-            if (start >= target) { start = target; clearInterval(timer); }
-            el.textContent = isDecimal ? start.toFixed(1) : Math.floor(start);
-          }, step);
-        });
-        countIO.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('.hero-stats').forEach(s => countIO.observe(s));
-
-  /* ── nav active ── */
-  const sections = document.querySelectorAll('section[id]');
-  window.addEventListener('scroll', () => {
-    let cur = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 80) cur = s.id;
-    });
-    document.querySelectorAll('.nav-links a').forEach(a => {
-      a.style.color = a.getAttribute('href') === '#'+cur ? 'var(--green-bright)' : '';
-    });
+/* ── SCROLL REVEAL ── */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      io.unobserve(e.target);
+    }
   });
+}, { threshold: 0.1 });
+revealEls.forEach(el => io.observe(el));
 
-  /* ── rotating EV stat text ── */
-  const evWords = ['PAN India', '₹ Green', 'EV Ready', 'Nationwide'];
-  let ei = 0;
-  const evEl = document.getElementById('pan-stat');
-  if (evEl) {
-    setInterval(() => {
-      ei = (ei+1) % evWords.length;
-      evEl.style.opacity = 0;
-      setTimeout(() => { evEl.textContent = evWords[ei]; evEl.style.opacity = 1; }, 250);
-    }, 2500);
-    evEl.style.transition = 'opacity 0.25s';
-  }
+/* ── SKILL BARS ── */
+const barIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.skill-bar').forEach(bar => {
+        bar.style.width = bar.dataset.width + '%';
+      });
+      barIO.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.skills-grid').forEach(g => barIO.observe(g));
+
+/* ── COUNT UP NUMBERS ── */
+const countIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('[data-count]').forEach(el => {
+        const target = parseFloat(el.dataset.count);
+        const isDecimal = String(target).includes('.');
+        let start = 0;
+        const dur = 1800, step = 16;
+        const inc = target / (dur / step);
+        const timer = setInterval(() => {
+          start += inc;
+          if (start >= target) { start = target; clearInterval(timer); }
+          el.textContent = isDecimal ? start.toFixed(1) : Math.floor(start);
+        }, step);
+      });
+      countIO.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.hero-stats').forEach(s => countIO.observe(s));
+
+/* ── NAV ACTIVE ── */
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 80) cur = s.id;
+  });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.style.color = a.getAttribute('href') === '#'+cur ? 'var(--green-bright)' : '';
+  });
+});
+
+/* ── ROTATING EV STAT TEXT ── */
+const evWords = ['PAN India', '₹ Green', 'EV Ready', 'Nationwide'];
+let ei = 0;
+const evEl = document.getElementById('pan-stat');
+if (evEl) {
+  setInterval(() => {
+    ei = (ei+1) % evWords.length;
+    evEl.style.opacity = 0;
+    setTimeout(() => { evEl.textContent = evWords[ei]; evEl.style.opacity = 1; }, 250);
+  }, 2500);
+  evEl.style.transition = 'opacity 0.25s';
+}
 </script>
 </body>
 </html>
